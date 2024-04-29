@@ -11,7 +11,8 @@ const App = () => {
   const { linkSuccess, isItemAccess, isPaymentInitiation, dispatch } = useContext(Context);
 
   const getInfo = useCallback(async () => {
-    const response = await fetch("http://localhost:8000/api/info", { method: "POST" });
+    
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/info`, { method: "POST" });
     if (!response.ok) {
       dispatch({ type: "SET_STATE", state: { backend: false } });
       return { paymentInitiation: false };
@@ -34,13 +35,13 @@ const App = () => {
     async (isPaymentInitiation) => {
       // Link tokens for 'payment_initiation' use a different creation flow in your backend.
       const path = isPaymentInitiation
-        ? "http://localhost:8000/api/create_link_token_for_payment"
-        : "http://localhost:8000/api/create_link_token";
+        ? `${process.env.REACT_APP_API_URL}/api/create_link_token_for_payment`
+        : `${process.env.REACT_APP_API_URL}/api/create_link_token`;
       const response = await fetch(path, {
         method: "POST",
       });
       if (!response.ok) {
-        alert('path = '+path);
+        
         dispatch({ type: "SET_STATE", state: { linkToken: null } });
         return;
       }
